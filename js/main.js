@@ -63,8 +63,8 @@ for (var i = 0; i < 8; i++) {
           checkin: CHECKINS[i],
           checkout: CHECKOUTS[i],
           features: getRandomArray(FEATURES),
-          description: 'Уютная квартира для постоянного проживания. Близко к центру города.', // скорее всего, нужно доработать
-          photos: getRandomArray(PHOTOS)},
+          description: 'Уютная квартира для постоянного проживания. Близко к центру города.',
+          photos: PHOTOS[i]},
         location: {
           x: x + PIN_WIDTH / 2, y: y + PIN_HEIGHT}
       }
@@ -111,7 +111,7 @@ var renderCard = function (similarpin) {
   cardElement.querySelector('.popup__text--capacity').textContent = similarpin.offer.rooms + ' комнаты для ' + similarpin.offer.guests + ' гостей';
   cardElement.querySelector('.popup__text--time').textContent = 'Заезд после ' + similarpin.offer.checkin + ', выезд до ' + similarpin.offer.checkout;
   cardElement.querySelectorAll('.popup__feature').textContent = similarpin.offer.features;
-  cardElement.querySelector('.popup__photo').src = PHOTOS[0];
+  cardElement.querySelector('.popup__photo').src = similarpin.offer.photos;
   cardElement.querySelector('.popup__description').textContent = similarpin.offer.description;
   cardElement.querySelector('.popup__avatar').src = similarpin.author.avatar;
 
