@@ -13,6 +13,7 @@ var CHECKINS = ['12:00', '13:00', '14:00'];
 var CHECKOUTS = ['12:00', '13:00', '14:00'];
 var FEATURES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
 var PHOTOS = ['http://o0.github.io/assets/images/tokyo/hotel1.jpg', 'http://o0.github.io/assets/images/tokyo/hotel2.jpg', 'http://o0.github.io/assets/images/tokyo/hotel3.jpg'];
+var DESCRIPTION = ['Уютная квартира для постоянного проживания. Близко к центру города.'];
 
 document.querySelector('.map').classList.remove('map--faded');
 
@@ -63,7 +64,7 @@ for (var i = 0; i < 8; i++) {
           checkin: CHECKINS[i],
           checkout: CHECKOUTS[i],
           features: getRandomArray(FEATURES),
-          description: 'Уютная квартира для постоянного проживания. Близко к центру города.',
+          description: DESCRIPTION[i],
           photos: getRandomArray(PHOTOS)},
         location: {
           x: x + PIN_WIDTH / 2, y: y + PIN_HEIGHT}
@@ -72,12 +73,10 @@ for (var i = 0; i < 8; i++) {
   imgNumber += 1;
 }
 
-
-var mapPinsList = document.querySelector('.map__pins'); // сюда будем вставлять метки
-var pinElementTemplate = document.querySelector('#pin') // шаблон, который будем клонировать
+var mapPinsList = document.querySelector('.map__pins');
+var pinElementTemplate = document.querySelector('#pin')
     .content
-    .querySelector('.map__pin'); // здесь будем заполнять данные
-
+    .querySelector('.map__pin');
 var renderSimilarPin = function (similarpin) {
   var pinElement = pinElementTemplate.cloneNode(true);
   pinElement.style = 'left: ' + similarpin.location.x + 'px; top: ' + similarpin.location.y + 'px;';
@@ -104,28 +103,20 @@ var cardTemplate = document.querySelector('#card')
 var photoElementTemplate = cardTemplate.querySelector('.popup__photo');
 var photoList = cardTemplate.querySelector('.popup__photos');
 
-// 1. Нахожу фото .popup__photo, клонирую его.
-// 2. Вставляю нужное количество раз в див .popup__photos
-// 3. В функции renderCard нахожу все фото .popup__photo через querySelectorAll и присваиваю им ссылки из массива
-// Проблема - 3й пункт не работает!
-// Пробую по-другому: присваиваю ссылки сразу после клонирования. Тогда ссылка не добавляется к первому фото. Почему не добавляется?
-// Если пишу эти функции в теле функции renderCard - вообще ничего не работает.
-// Что я делаю не так?
-
 var renderPhoto = function () {
   var photoElement = photoElementTemplate.cloneNode(true);
-  photoElement.src = PHOTOS[i]; // подставила этот массив, чтобы упростить пока что. И так ничего не получается)
+  photoElement.src = similarPins[i].offer.photos[i];
   return photoElement;
 };
 
 var createPhotoFragment = function () {
   var photoFragment = document.createDocumentFragment();
-  for (i = 0; i < 3; i++) {
+  for (i = 0; i < PHOTOS.length; i++) {
     photoFragment.appendChild(renderPhoto());
   }
   return photoFragment;
 };
-
+photoList.textContent = '';
 photoList.appendChild(createPhotoFragment());
 
 var renderCard = function (similarpin) {
@@ -136,7 +127,7 @@ var renderCard = function (similarpin) {
   cardElement.querySelector('.popup__type').textContent = similarpin.offer.type.name;
   cardElement.querySelector('.popup__text--capacity').textContent = similarpin.offer.rooms + ' комнаты для ' + similarpin.offer.guests + ' гостей';
   cardElement.querySelector('.popup__text--time').textContent = 'Заезд после ' + similarpin.offer.checkin + ', выезд до ' + similarpin.offer.checkout;
-  cardElement.querySelectorAll('.popup__feature').textContent = similarpin.offer.features;
+  // cardElement.querySelector('.popup__feature').textContent = similarpin.offer.features; // не поняла задание, не знаю, что нужно делать)
   cardElement.querySelector('.popup__description').textContent = similarpin.offer.description;
   cardElement.querySelector('.popup__avatar').src = similarpin.author.avatar;
 
