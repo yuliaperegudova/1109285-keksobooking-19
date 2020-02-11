@@ -33,7 +33,7 @@ var shuffleArray = function (array) {
 };
 
 var getRandomArray = function (array, newArray) {
-  newArray = array.slice(0, getRandomInt(0, array.length + 1));
+  newArray = array.slice(0, getRandomInt(1, array.length + 1));
   return newArray;
 };
 
@@ -64,7 +64,7 @@ for (var i = 0; i < 8; i++) {
           checkout: CHECKOUTS[i],
           features: getRandomArray(FEATURES),
           description: 'Уютная квартира для постоянного проживания. Близко к центру города.',
-          photos: PHOTOS[i]},
+          photos: getRandomArray(PHOTOS)},
         location: {
           x: x + PIN_WIDTH / 2, y: y + PIN_HEIGHT}
       }
@@ -96,11 +96,37 @@ var createFragment = function (array) {
 };
 mapPinsList.appendChild(createFragment(similarPins));
 
-var mapSection = document.querySelector('.map'); // сюда вставим карточки
-var beforeElement = document.querySelector('.map__filters-container'); // вставить фрагмент перед этим блоком
-var cardTemplate = document.querySelector('#card') // шаблон
+var mapSection = document.querySelector('.map');
+var beforeElement = document.querySelector('.map__filters-container');
+var cardTemplate = document.querySelector('#card')
   .content
-  .querySelector('.map__card'); // элемент
+  .querySelector('.map__card');
+var photoElementTemplate = cardTemplate.querySelector('.popup__photo');
+var photoList = cardTemplate.querySelector('.popup__photos');
+
+// 1. Нахожу фото .popup__photo, клонирую его.
+// 2. Вставляю нужное количество раз в див .popup__photos
+// 3. В функции renderCard нахожу все фото .popup__photo через querySelectorAll и присваиваю им ссылки из массива
+// Проблема - 3й пункт не работает!
+// Пробую по-другому: присваиваю ссылки сразу после клонирования. Тогда ссылка не добавляется к первому фото. Почему не добавляется?
+// Если пишу эти функции в теле функции renderCard - вообще ничего не работает.
+// Что я делаю не так?
+
+var renderPhoto = function () {
+  var photoElement = photoElementTemplate.cloneNode(true);
+  photoElement.src = PHOTOS[i]; // подставила этот массив, чтобы упростить пока что. И так ничего не получается)
+  return photoElement;
+};
+
+var createPhotoFragment = function () {
+  var photoFragment = document.createDocumentFragment();
+  for (i = 0; i < 3; i++) {
+    photoFragment.appendChild(renderPhoto());
+  }
+  return photoFragment;
+};
+
+photoList.appendChild(createPhotoFragment());
 
 var renderCard = function (similarpin) {
   var cardElement = cardTemplate.cloneNode(true);
@@ -111,27 +137,11 @@ var renderCard = function (similarpin) {
   cardElement.querySelector('.popup__text--capacity').textContent = similarpin.offer.rooms + ' комнаты для ' + similarpin.offer.guests + ' гостей';
   cardElement.querySelector('.popup__text--time').textContent = 'Заезд после ' + similarpin.offer.checkin + ', выезд до ' + similarpin.offer.checkout;
   cardElement.querySelectorAll('.popup__feature').textContent = similarpin.offer.features;
-  cardElement.querySelector('.popup__photo').src = similarpin.offer.photos;
   cardElement.querySelector('.popup__description').textContent = similarpin.offer.description;
   cardElement.querySelector('.popup__avatar').src = similarpin.author.avatar;
 
   return cardElement;
 };
 
-mapSection.insertBefore(renderCard(similarPins[[0]]), beforeElement); // правильно ли я указала место вставки?
-
-var photoTemplate = document.querySelector('#card') // шаблон
-  .content
-  .querySelector('.popup__photo'); // элемент;
-var photoList = document.querySelector('.popup__photos'); // сюда вставлять
-
-var renderPhoto = function () {
-  var photoElement = photoTemplate.cloneNode(true);
-  photoElement.src = PHOTOS[i];
-  return photoElement;
-};
-for (i = 1; i < PHOTOS.length; i++) {
-  photoList.appendChild(renderPhoto());
-}
-
+mapSection.insertBefore(renderCard(similarPins[[0]]), beforeElement);
 
