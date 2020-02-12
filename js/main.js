@@ -119,7 +119,24 @@ var createPhotoFragment = function () {
 photoList.textContent = '';
 photoList.appendChild(createPhotoFragment());
 
+var showFeatures = function (feature) {
+  for (i = 0; i < FEATURES.length; i++) {
+    var featureElement = cardTemplate.querySelector('.popup__feature--' + feature);
+    if (similarPins[i].offer.features[i] === feature) {
+      featureElement.textContent = FEATURES[i];
+    }
+  }
+};
+
+// как удалить или не отображать лишние элементы - в которые ничего не записывается?
+
 var renderCard = function (similarpin) {
+  showFeatures('parking'); // если я убираю вызовы функций в цикл, она вызывается только 1 раз, или перезаписывается
+  showFeatures('wifi');
+  showFeatures('washer');
+  showFeatures('dishwasher');
+  showFeatures('elevator');
+  showFeatures('conditioner');
   var cardElement = cardTemplate.cloneNode(true);
   cardElement.querySelector('.popup__title').textContent = similarpin.offer.title;
   cardElement.querySelector('.popup__text--address').textContent = similarpin.offer.address;
@@ -127,9 +144,9 @@ var renderCard = function (similarpin) {
   cardElement.querySelector('.popup__type').textContent = similarpin.offer.type.name;
   cardElement.querySelector('.popup__text--capacity').textContent = similarpin.offer.rooms + ' комнаты для ' + similarpin.offer.guests + ' гостей';
   cardElement.querySelector('.popup__text--time').textContent = 'Заезд после ' + similarpin.offer.checkin + ', выезд до ' + similarpin.offer.checkout;
-  // cardElement.querySelector('.popup__feature').textContent = similarpin.offer.features; // не поняла задание, не знаю, что нужно делать)
   cardElement.querySelector('.popup__description').textContent = similarpin.offer.description;
   cardElement.querySelector('.popup__avatar').src = similarpin.author.avatar;
+
 
   return cardElement;
 };
