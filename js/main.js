@@ -118,20 +118,20 @@ var createPhotoFragment = function () {
 };
 photoList.textContent = '';
 
-cardTemplate.querySelector('.popup__feature--parking').classList.add('visually-hidden');
-cardTemplate.querySelector('.popup__feature--wifi').classList.add('visually-hidden');
-cardTemplate.querySelector('.popup__feature--washer').classList.add('visually-hidden');
-cardTemplate.querySelector('.popup__feature--dishwasher').classList.add('visually-hidden');
-cardTemplate.querySelector('.popup__feature--elevator').classList.add('visually-hidden');
-cardTemplate.querySelector('.popup__feature--conditioner').classList.add('visually-hidden');
+var allFeatures = cardTemplate.querySelectorAll('.popup__feature');
 
-// cardTemplate.querySelectorAll('.popup__feature').classList.add('visually-hidden'); Почему такой код не сработает?
-// Как тогда правильно добавить класс всем элементам коллекции?
+var hideFeatures = function () {
+  for (var j = 0; j < allFeatures.length; j++) {
+    allFeatures[j].classList.add('visually-hidden');
+  }
+};
+
+hideFeatures();
 
 var showFeatures = function (feature) {
-  for (i = 0; i < FEATURES.length; i++) {
+  for (var j = 0; j < FEATURES.length; j++) {
     var featureElement = cardTemplate.querySelector('.popup__feature--' + feature);
-    if (similarPins[i].offer.features[i] === feature) {
+    if (similarPins[j].offer.features[j] === feature) {
       featureElement.textContent = feature;
       featureElement.classList.remove('visually-hidden');
     }
@@ -139,21 +139,14 @@ var showFeatures = function (feature) {
   return featureElement;
 };
 
-/* Почему такой код не работает?
-for (i = 0; i < FEATURES.length; i++) {
-  showFeatures(FEATURES[i]);
-}
-*/
-
-showFeatures(FEATURES[0]);
-showFeatures(FEATURES[1]);
-showFeatures(FEATURES[2]);
-showFeatures(FEATURES[3]);
-showFeatures(FEATURES[4]);
-showFeatures(FEATURES[5]);
-
+var renderFeatures = function () {
+  for (i = 0; i < FEATURES.length; i++) {
+    showFeatures(FEATURES[i]);
+  }
+};
 
 var renderCard = function (similarpin) {
+  renderFeatures();
   photoList.appendChild(createPhotoFragment());
   var cardElement = cardTemplate.cloneNode(true);
   cardElement.querySelector('.popup__title').textContent = similarpin.offer.title;
@@ -169,27 +162,3 @@ var renderCard = function (similarpin) {
 };
 
 mapSection.insertBefore(renderCard(similarPins[[0]]), beforeElement);
-
-// Оставлю пока на всякий случай
-/*
-var featureElementTemplate = cardTemplate.querySelectorAll('.popup__feature'); // находим все элементы списка
-var featureList = cardTemplate.querySelector('.popup__features'); // сюда вставляем новые элементы
-
-var renderFeatures = function () {
-  featureElementTemplate[i].textContent = FEATURES[i]; // даем каждому элементу значение из массива
-  var featureElement = featureElementTemplate[i].cloneNode(true); // клонируем элемент по очереди
-  return featureElement;
-};
-
-var createFeatureFragment = function () {
-  var featureFragment = document.createDocumentFragment();
-  for (i = 0; i < FEATURES.length; i++) {
-    featureFragment.appendChild(renderFeatures());
-  }
-  return featureFragment;
-};
-
-featureList.textContent = '';
-
-featureList.appendChild(createFeatureFragment());
-*/
