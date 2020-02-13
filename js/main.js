@@ -117,26 +117,44 @@ var createPhotoFragment = function () {
   return photoFragment;
 };
 photoList.textContent = '';
-photoList.appendChild(createPhotoFragment());
+
+cardTemplate.querySelector('.popup__feature--parking').classList.add('visually-hidden');
+cardTemplate.querySelector('.popup__feature--wifi').classList.add('visually-hidden');
+cardTemplate.querySelector('.popup__feature--washer').classList.add('visually-hidden');
+cardTemplate.querySelector('.popup__feature--dishwasher').classList.add('visually-hidden');
+cardTemplate.querySelector('.popup__feature--elevator').classList.add('visually-hidden');
+cardTemplate.querySelector('.popup__feature--conditioner').classList.add('visually-hidden');
+
+// cardTemplate.querySelectorAll('.popup__feature').classList.add('visually-hidden'); Почему такой код не сработает?
+// Как тогда правильно добавить класс всем элементам коллекции?
 
 var showFeatures = function (feature) {
   for (i = 0; i < FEATURES.length; i++) {
     var featureElement = cardTemplate.querySelector('.popup__feature--' + feature);
     if (similarPins[i].offer.features[i] === feature) {
-      featureElement.textContent = FEATURES[i];
+      featureElement.textContent = feature;
+      featureElement.classList.remove('visually-hidden');
     }
   }
+  return featureElement;
 };
 
-// как удалить или не отображать лишние элементы - в которые ничего не записывается?
+/* Почему такой код не работает?
+for (i = 0; i < FEATURES.length; i++) {
+  showFeatures(FEATURES[i]);
+}
+*/
+
+showFeatures(FEATURES[0]);
+showFeatures(FEATURES[1]);
+showFeatures(FEATURES[2]);
+showFeatures(FEATURES[3]);
+showFeatures(FEATURES[4]);
+showFeatures(FEATURES[5]);
+
 
 var renderCard = function (similarpin) {
-  showFeatures('parking'); // если я убираю вызовы функций в цикл, она вызывается только 1 раз, или перезаписывается
-  showFeatures('wifi');
-  showFeatures('washer');
-  showFeatures('dishwasher');
-  showFeatures('elevator');
-  showFeatures('conditioner');
+  photoList.appendChild(createPhotoFragment());
   var cardElement = cardTemplate.cloneNode(true);
   cardElement.querySelector('.popup__title').textContent = similarpin.offer.title;
   cardElement.querySelector('.popup__text--address').textContent = similarpin.offer.address;
@@ -147,9 +165,31 @@ var renderCard = function (similarpin) {
   cardElement.querySelector('.popup__description').textContent = similarpin.offer.description;
   cardElement.querySelector('.popup__avatar').src = similarpin.author.avatar;
 
-
   return cardElement;
 };
 
 mapSection.insertBefore(renderCard(similarPins[[0]]), beforeElement);
 
+// Оставлю пока на всякий случай
+/*
+var featureElementTemplate = cardTemplate.querySelectorAll('.popup__feature'); // находим все элементы списка
+var featureList = cardTemplate.querySelector('.popup__features'); // сюда вставляем новые элементы
+
+var renderFeatures = function () {
+  featureElementTemplate[i].textContent = FEATURES[i]; // даем каждому элементу значение из массива
+  var featureElement = featureElementTemplate[i].cloneNode(true); // клонируем элемент по очереди
+  return featureElement;
+};
+
+var createFeatureFragment = function () {
+  var featureFragment = document.createDocumentFragment();
+  for (i = 0; i < FEATURES.length; i++) {
+    featureFragment.appendChild(renderFeatures());
+  }
+  return featureFragment;
+};
+
+featureList.textContent = '';
+
+featureList.appendChild(createFeatureFragment());
+*/
