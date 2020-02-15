@@ -111,7 +111,7 @@ var renderPhoto = function () {
 
 var createPhotoFragment = function () {
   var photoFragment = document.createDocumentFragment();
-  for (i = 0; i < PHOTOS.length; i++) {
+  for (i = 0; i < similarPins[i].offer.photos.length; i++) {
     photoFragment.appendChild(renderPhoto());
   }
   return photoFragment;
