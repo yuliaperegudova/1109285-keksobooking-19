@@ -15,13 +15,15 @@ var FEATURES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditio
 var PHOTOS = ['http://o0.github.io/assets/images/tokyo/hotel1.jpg', 'http://o0.github.io/assets/images/tokyo/hotel2.jpg', 'http://o0.github.io/assets/images/tokyo/hotel3.jpg'];
 var DESCRIPTION = ['Уютная квартира для постоянного проживания. Близко к центру города.'];
 
-document.querySelector('.map').classList.remove('map--faded');
+// находим рандомное число
 
 var getRandomInt = function (min, max) {
   min = Math.ceil(min);
   max = Math.floor(max);
   return Math.floor(Math.random() * (max - min + 1)) + min;
 };
+
+// перемешиваем массивы
 
 var shuffleArray = function (array) {
   for (var i = array.length - 1; i > 0; i--) {
@@ -33,10 +35,14 @@ var shuffleArray = function (array) {
   return array;
 };
 
+// генерируем массив
+
 var getRandomArray = function (array, newArray) {
   newArray = array.slice(0, getRandomInt(1, array.length + 1));
   return newArray;
 };
+
+// создаем массив similarPins
 
 var similarPins = [];
 
@@ -73,6 +79,8 @@ for (var i = 0; i < 8; i++) {
   imgNumber += 1;
 }
 
+// рисуем на карте метки
+
 var mapPinsList = document.querySelector('.map__pins');
 var pinElementTemplate = document.querySelector('#pin')
     .content
@@ -93,7 +101,191 @@ var createFragment = function (array) {
   }
   return fragment;
 };
-mapPinsList.appendChild(createFragment(similarPins));
+
+// задание 4
+
+var mainPin = document.querySelector('.map__pin--main');
+var allFieldset = document.querySelectorAll('fieldset');
+var address = document.querySelector('#address');
+address.setAttribute('value', '570, 375');
+
+
+// для неактивного режима
+
+var hideFieldset = function () { // сделать форму неактивной
+  for (var j = 0; j < allFieldset.length; j++) {
+    allFieldset[j].setAttribute('disabled', 'disabled');
+  }
+  return hideFieldset;
+};
+
+var allFilters = document.querySelectorAll('.map__filter');
+
+var hideFilters = function () { // сделать фильтры неактивными
+  for (var j = 0; j < allFilters.length; j++) {
+    allFilters[j].setAttribute('disabled', 'disabled');
+  }
+  return hideFilters;
+};
+
+var disabledMode = function () {
+  hideFieldset();
+  hideFilters();
+};
+
+disabledMode();
+
+// для активного режима
+
+var showFieldset = function () { // сделать форму активной
+  for (var j = 0; j < allFieldset.length; j++) {
+    allFieldset[j].removeAttribute('disabled', 'disabled');
+  }
+  return showFieldset;
+};
+
+var showFilters = function () { // сделать форму активной
+  for (var j = 0; j < allFilters.length; j++) {
+    allFilters[j].removeAttribute('disabled', 'disabled');
+  }
+  return showFilters;
+};
+
+var activeMode = function () {
+  mainPin.draggable = true;
+  document.querySelector('.map').classList.remove('map--faded');
+  document.querySelector('.ad-form').classList.remove('ad-form--disabled');
+  mapPinsList.appendChild(createFragment(similarPins));
+  showFieldset();
+  showFilters();
+};
+
+mainPin.addEventListener('mousedown', function () {
+  activeMode();
+});
+
+// связали тип жилья и минимальную цену
+
+var typeForm = document.querySelector('#type');
+var priceInput = document.querySelector('#price');
+
+var onChangeTypeForm = function (evt) {
+  if (evt.target.value === 'house') {
+    priceInput.placeholder = 5000;
+    priceInput.min = 5000;
+  } else if (evt.target.value === 'flat') {
+    priceInput.placeholder = 1000;
+    priceInput.min = 1000;
+  } else if (evt.target.value === 'bungalo') {
+    priceInput.placeholder = 0;
+    priceInput.min = 0;
+  } else if (evt.target.value === 'palace') {
+    priceInput.placeholder = 10000;
+    priceInput.min = 10000;
+  }
+};
+
+
+typeForm.addEventListener('change', onChangeTypeForm);
+
+priceInput.addEventListener('input', function () {
+  if (priceInput.validity.rangeUnderflow) {
+    priceInput.setCustomValidity('Очень мало!');
+  } else if (priceInput.validity.rangeOverflow) {
+    priceInput.setCustomValidity('Очень много!');
+  } else {
+    priceInput.setCustomValidity('');
+  }
+});
+
+// время заезда и время выезда
+
+var timeIn = document.querySelector('#timein');
+var timeOut = document.querySelector('#timeout');
+var timeOutOptions = timeOut.querySelectorAll('option');
+var timeInOptions = timeIn.querySelectorAll('option');
+
+timeIn.addEventListener('change', function (evt) {
+  for (var q = 0; q < 3; q++) {
+    if (evt.target.value === timeOutOptions[q].value) {
+      timeOutOptions[q].selected = true;
+    }
+  }
+});
+
+timeOut.addEventListener('change', function (evt) {
+  for (var q = 0; q < 3; q++) {
+    if (evt.target.value === timeInOptions[q].value) {
+      timeInOptions[q].selected = true;
+    }
+  }
+});
+
+// связали количество мест и количество комнат
+
+var roomNumberSelect = document.querySelector('#room_number');
+var capacitySelect = document.querySelector('#capacity');
+var capacityOptions = capacitySelect.querySelectorAll('option');
+
+// функция отмены disabled для всех вариантов
+
+var showAllOptions = function () {
+  for (var a = 0; a < capacityOptions.length; a++) {
+    capacityOptions[a].removeAttribute('disabled', false);
+  }
+};
+
+// условия для каждой комнаты
+
+var room1 = function () {
+  capacityOptions[2].selected = true;
+  showAllOptions();
+  capacityOptions[0].setAttribute('disabled', true);
+  capacityOptions[1].setAttribute('disabled', true);
+  capacityOptions[3].setAttribute('disabled', true);
+};
+
+var room2 = function () {
+  capacityOptions[1].selected = true;
+  showAllOptions();
+  capacityOptions[0].setAttribute('disabled', true);
+  capacityOptions[3].setAttribute('disabled', true);
+};
+
+var room3 = function () {
+  capacityOptions[0].selected = true;
+  showAllOptions();
+  capacityOptions[3].setAttribute('disabled', true);
+};
+
+var room100 = function () {
+  capacityOptions[3].selected = true;
+  showAllOptions();
+  capacityOptions[0].setAttribute('disabled', true);
+  capacityOptions[1].setAttribute('disabled', true);
+  capacityOptions[2].setAttribute('disabled', true);
+};
+
+// вызов функции, чтобы до события клик все работало
+
+room1();
+
+var onRoomNumberSelect = function (evt) {
+  var target = evt.target;
+  if (target.value === '1') {
+    room1();
+  } else if (target.value === '2') {
+    room2();
+  } else if (target.value === '3') {
+    room3();
+  } else if (target.value === '100') {
+    room100();
+  }
+};
+
+roomNumberSelect.addEventListener('change', onRoomNumberSelect);
+
+/*
 
 var mapSection = document.querySelector('.map');
 var beforeElement = document.querySelector('.map__filters-container');
@@ -162,3 +354,4 @@ var renderCard = function (similarpin) {
 };
 
 mapSection.insertBefore(renderCard(similarPins[[0]]), beforeElement);
+*/
