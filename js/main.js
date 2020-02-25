@@ -185,6 +185,7 @@ var onChangeTypeForm = function (evt) {
   }
 };
 
+
 typeForm.addEventListener('change', onChangeTypeForm);
 
 priceInput.addEventListener('input', function () {
@@ -202,18 +203,23 @@ priceInput.addEventListener('input', function () {
 var timeIn = document.querySelector('#timein');
 var timeOut = document.querySelector('#timeout');
 var timeOutOptions = timeOut.querySelectorAll('option');
+var timeInOptions = timeIn.querySelectorAll('option');
 
-var onTimeInSelect = function (evt) {
-  if (evt.target.value === '12:00') {
-    timeOutOptions[0].selected = true;
-  } else if (evt.target.value === '13:00') {
-    timeOutOptions[1].selected = true;
-  } else if (evt.target.value === '14:00') {
-    timeOutOptions[2].selected = true;
+timeIn.addEventListener('change', function (evt) {
+  for (var q = 0; q < 3; q++) {
+    if (evt.target.value === timeOutOptions[q].value) {
+      timeOutOptions[q].selected = true;
+    }
   }
-};
+});
 
-timeIn.addEventListener('change', onTimeInSelect);
+timeOut.addEventListener('change', function (evt) {
+  for (var q = 0; q < 3; q++) {
+    if (evt.target.value === timeInOptions[q].value) {
+      timeInOptions[q].selected = true;
+    }
+  }
+});
 
 // связали количество мест и количество комнат
 
