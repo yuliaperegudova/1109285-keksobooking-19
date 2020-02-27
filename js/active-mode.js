@@ -25,9 +25,15 @@
     mainPin.draggable = true;
     document.querySelector('.map').classList.remove('map--faded');
     document.querySelector('.ad-form').classList.remove('ad-form--disabled');
-    window.pin.list.appendChild(window.pin.createFragment(window.data.similarPins));
     showFieldset();
     showFilters();
+    window.backend.load(function (array) {
+      var fragment = document.createDocumentFragment();
+      for (var i = 0; i < array.length; i++) {
+        fragment.appendChild(window.pin.renderSimilar(array[i]));
+      }
+      window.pin.list.appendChild(fragment);
+    });
   };
 
   window.activeMode = {
