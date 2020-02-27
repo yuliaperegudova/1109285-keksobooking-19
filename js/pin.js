@@ -7,7 +7,7 @@
       .content
       .querySelector('.map__pin');
 
-  var renderSimilarPin = function (similarpin) {
+  var renderSimilar = function (similarpin) {
     var pinElement = pinElementTemplate.cloneNode(true);
     pinElement.style = 'left: ' + similarpin.location.x + 'px; top: ' + similarpin.location.y + 'px;';
     pinElement.querySelector('img').src = similarpin.author.avatar;
@@ -16,17 +16,15 @@
     return pinElement;
   };
 
-  var createFragment = function (array) {
-    var fragment = document.createDocumentFragment();
-    for (var i = 0; i < array.length; i++) {
-      fragment.appendChild(renderSimilarPin(array[i]));
-    }
-    return fragment;
-  };
+  // window.backend.load(function (array) {
+  //   var fragment = document.createDocumentFragment();
+  //   for (var i = 0; i < array.length; i++) {
+  //     fragment.appendChild(renderSimilarPin(array[i]));
+  //   }
+  //   list.appendChild(fragment);
+  // });
   window.pin = {
     list: list,
-    createFragment: createFragment
+    renderSimilar: renderSimilar,
   };
 })();
-
-
