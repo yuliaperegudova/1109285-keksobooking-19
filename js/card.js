@@ -7,23 +7,20 @@
   var cardTemplate = document.querySelector('#card')
     .content
     .querySelector('.map__card');
-  var photoElementTemplate = cardTemplate.querySelector('.popup__photo');
+
+  var photoTemplate = cardTemplate.querySelector('.popup__photo');
   var photoList = cardTemplate.querySelector('.popup__photos');
 
-  var renderPhoto = function () {
-    var i; // разобраться с переменной
-    var photoElement = photoElementTemplate.cloneNode(true);
-    photoElement.src = window.data.similarPins[i].offer.photos[i];
-    return photoElement;
+  // var PHOTOS = ['http://o0.github.io/assets/images/tokyo/hotel1.jpg', 'http://o0.github.io/assets/images/tokyo/hotel2.jpg', 'http://o0.github.io/assets/images/tokyo/hotel3.jpg'];
+
+  var renderPhoto = function (photoarray) {
+    photoarray.forEach(function (it) {
+      var photo = photoTemplate.cloneNode(true);
+      photo.src = it;
+      photoList.appendChild(photo);
+    });
   };
 
-  var createPhotoFragment = function () {
-    var photoFragment = document.createDocumentFragment();
-    for (var i = 0; i < window.data.similarPins[i].offer.photos.length; i++) {
-      photoFragment.appendChild(renderPhoto());
-    }
-    return photoFragment;
-  };
   photoList.textContent = '';
 
   var allFeatures = cardTemplate.querySelectorAll('.popup__feature');
@@ -50,9 +47,12 @@
       showFeatures(FEATURES[i]);
     }
   };
-  var renderCard = function (similarpin) {
+  var renderCard = function (similarpin) { // функция отрисовки карточки
+    var photos = similarpin.offer.photos.slice(function (array) {
+      return array.photos;
+    });
     renderFeatures();
-    photoList.appendChild(createPhotoFragment());
+    renderPhoto(photos);
     var cardElement = cardTemplate.cloneNode(true);
     cardElement.querySelector('.popup__title').textContent = similarpin.offer.title;
     cardElement.querySelector('.popup__text--address').textContent = similarpin.offer.address;
@@ -66,4 +66,5 @@
   };
 
   mapSection.insertBefore(renderCard(window.data.similarPins[[0]]), beforeElement);
+
 })();

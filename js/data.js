@@ -79,8 +79,12 @@
     );
     imgNumber += 1;
   }
+  var photos = similarPins[2].offer.photos.slice(function (array) {
+    return array.photos;
+  });
 
   window.data = {
-    similarPins: similarPins
+    similarPins: similarPins,
+    photos: photos
   };
 })();

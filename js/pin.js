@@ -16,13 +16,6 @@
     return pinElement;
   };
 
-  // window.backend.load(function (array) {
-  //   var fragment = document.createDocumentFragment();
-  //   for (var i = 0; i < array.length; i++) {
-  //     fragment.appendChild(renderSimilarPin(array[i]));
-  //   }
-  //   list.appendChild(fragment);
-  // });
   window.pin = {
     list: list,
     renderSimilar: renderSimilar,
