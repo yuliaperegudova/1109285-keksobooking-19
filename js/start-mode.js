@@ -3,7 +3,6 @@
 (function () {
   var address = document.querySelector('#address');
   address.setAttribute('value', '570, 375');
-  document.querySelector('.popup').classList.add('hidden');
 
   var hideFieldset = function () { // сделать форму неактивной
     for (var j = 0; j < window.activeMode.formFieldset.length; j++) {

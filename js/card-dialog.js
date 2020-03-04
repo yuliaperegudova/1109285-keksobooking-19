@@ -1,9 +1,15 @@
 'use strict';
 
 (function () {
-  var card = document.querySelector('.popup');
-  var cardClose = document.querySelector('.popup__close');
   var pin = document.querySelector('.map__pin');
+  var mapSection = document.querySelector('.map');
+  var beforeElement = document.querySelector('.map__filters-container');
+
+  var onPopupEscPress = function (evt) {
+    window.util.isEscEvent(evt, closePopup);
+  };
+
+  // нужно добавить обработчик на каждую метку с помощью цикла
 
   document.addEventListener('click', function (evt) {
     if (evt.target.className === 'map__pin') {
@@ -16,25 +22,30 @@
     window.util.isEnterEvent(evt, openPopup);
   });
 
-  cardClose.addEventListener('click', function () {
-    closePopup();
-  });
-
-  cardClose.addEventListener('keydown', function (evt) {
-    window.util.isEnterEvent(evt, closePopup);
-  });
-
-  var onPopupEscPress = function (evt) {
-    window.util.isEscEvent(evt, closePopup);
-  };
-
-  var openPopup = function () {
-    card.classList.remove('hidden');
+  var openPopup = function () { // открыть и закрыть карточку
     document.addEventListener('keydown', onPopupEscPress);
+
+    window.backend.load(function (similarpin) { // отрисовка карточки
+      var fragment = document.createDocumentFragment();
+      for (var i = 0; i < 1; i++) {
+        fragment.appendChild(window.card.renderCard(similarpin[i]));
+      }
+      mapSection.insertBefore(fragment, beforeElement);
+
+      var cardClose = document.querySelector('.popup__close');
+
+      cardClose.addEventListener('click', function () {
+        closePopup();
+      });
+      cardClose.addEventListener('keydown', function (evt) {
+        window.util.isEnterEvent(evt, closePopup);
+      });
+    });
   };
 
   var closePopup = function () {
-    card.classList.add('hidden');
+    var card = document.querySelector('.popup');
+    card.remove();
     document.removeEventListener('keydown', onPopupEscPress);
   };
 

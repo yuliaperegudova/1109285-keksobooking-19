@@ -2,8 +2,6 @@
 
 (function () {
   var FEATURES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
-  var mapSection = document.querySelector('.map');
-  var beforeElement = document.querySelector('.map__filters-container');
   var cardTemplate = document.querySelector('#card')
     .content
     .querySelector('.map__card');
@@ -11,16 +9,13 @@
   var photoTemplate = cardTemplate.querySelector('.popup__photo');
   var photoList = cardTemplate.querySelector('.popup__photos');
 
-  // var PHOTOS = ['http://o0.github.io/assets/images/tokyo/hotel1.jpg', 'http://o0.github.io/assets/images/tokyo/hotel2.jpg', 'http://o0.github.io/assets/images/tokyo/hotel3.jpg'];
-
-  var renderPhoto = function (photoarray) {
-    photoarray.forEach(function (it) {
+  var renderPhoto = function (photoArray) {
+    photoArray.forEach(function (it) {
       var photo = photoTemplate.cloneNode(true);
       photo.src = it;
       photoList.appendChild(photo);
     });
   };
-
   photoList.textContent = '';
 
   var allFeatures = cardTemplate.querySelectorAll('.popup__feature');
@@ -65,6 +60,8 @@
     return cardElement;
   };
 
-  mapSection.insertBefore(renderCard(window.data.similarPins[[0]]), beforeElement);
+  window.card = {
+    renderCard: renderCard
+  };
 
 })();
