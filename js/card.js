@@ -6,7 +6,7 @@
     .content
     .querySelector('.map__card');
 
-  var photoTemplate = cardTemplate.querySelector('.popup__photo');
+  var photoTemplate = cardTemplate.querySelector('.popup__photo'); // рисуем фото
   var photoList = cardTemplate.querySelector('.popup__photos');
 
   var renderPhoto = function (photoArray) {
@@ -18,7 +18,7 @@
   };
   photoList.textContent = '';
 
-  var allFeatures = cardTemplate.querySelectorAll('.popup__feature');
+  var allFeatures = cardTemplate.querySelectorAll('.popup__feature'); // прячем фичи
   var hideFeatures = function () {
     for (var j = 0; j < allFeatures.length; j++) {
       allFeatures[j].classList.add('visually-hidden');
@@ -26,7 +26,8 @@
   };
   hideFeatures();
 
-  var showFeatures = function (feature) {
+
+  var showFeatures = function (feature) { // создаем новые фичи
     for (var j = 0; j < FEATURES.length; j++) {
       var featureElement = cardTemplate.querySelector('.popup__feature--' + feature);
       if (window.data.similarPins[j].offer.features[j] === feature) {
