@@ -2,31 +2,23 @@
 
 (function () {
   var FEATURES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
-  var mapSection = document.querySelector('.map');
-  var beforeElement = document.querySelector('.map__filters-container');
   var cardTemplate = document.querySelector('#card')
     .content
     .querySelector('.map__card');
-  var photoElementTemplate = cardTemplate.querySelector('.popup__photo');
+
+  var photoTemplate = cardTemplate.querySelector('.popup__photo'); // рисуем фото
   var photoList = cardTemplate.querySelector('.popup__photos');
 
-  var renderPhoto = function () {
-    var i; // разобраться с переменной
-    var photoElement = photoElementTemplate.cloneNode(true);
-    photoElement.src = window.data.similarPins[i].offer.photos[i];
-    return photoElement;
-  };
-
-  var createPhotoFragment = function () {
-    var photoFragment = document.createDocumentFragment();
-    for (var i = 0; i < window.data.similarPins[i].offer.photos.length; i++) {
-      photoFragment.appendChild(renderPhoto());
-    }
-    return photoFragment;
+  var renderPhoto = function (photoArray) {
+    photoArray.forEach(function (it) {
+      var photo = photoTemplate.cloneNode(true);
+      photo.src = it;
+      photoList.appendChild(photo);
+    });
   };
   photoList.textContent = '';
 
-  var allFeatures = cardTemplate.querySelectorAll('.popup__feature');
+  var allFeatures = cardTemplate.querySelectorAll('.popup__feature'); // прячем фичи
   var hideFeatures = function () {
     for (var j = 0; j < allFeatures.length; j++) {
       allFeatures[j].classList.add('visually-hidden');
@@ -34,7 +26,8 @@
   };
   hideFeatures();
 
-  var showFeatures = function (feature) {
+
+  var showFeatures = function (feature) { // создаем новые фичи
     for (var j = 0; j < FEATURES.length; j++) {
       var featureElement = cardTemplate.querySelector('.popup__feature--' + feature);
       if (window.data.similarPins[j].offer.features[j] === feature) {
@@ -50,9 +43,12 @@
       showFeatures(FEATURES[i]);
     }
   };
-  var renderCard = function (similarpin) {
+  var renderCard = function (similarpin) { // функция отрисовки карточки
+    var photos = similarpin.offer.photos.slice(function (array) {
+      return array.photos;
+    });
     renderFeatures();
-    photoList.appendChild(createPhotoFragment());
+    renderPhoto(photos);
     var cardElement = cardTemplate.cloneNode(true);
     cardElement.querySelector('.popup__title').textContent = similarpin.offer.title;
     cardElement.querySelector('.popup__text--address').textContent = similarpin.offer.address;
@@ -65,5 +61,8 @@
     return cardElement;
   };
 
-  mapSection.insertBefore(renderCard(window.data.similarPins[[0]]), beforeElement);
+  window.card = {
+    renderCard: renderCard
+  };
+
 })();
