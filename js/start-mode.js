@@ -28,4 +28,8 @@
   window.activeMode.mainPin.addEventListener('mousedown', function () {
     window.activeMode.set();
   });
+
+  window.startMode = {
+    disabledMode: disabledMode
+  };
 })();
