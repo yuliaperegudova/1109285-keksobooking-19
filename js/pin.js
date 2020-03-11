@@ -16,7 +16,7 @@
     pinElement.value = counter += 1;
 
     pinElement.addEventListener('click', function (evt) {
-      evt.target.classList.add('map__pin--active');
+      evt.currentTarget.classList.add('map__pin--active');
       window.cardDialog.openPopup();
     });
 
