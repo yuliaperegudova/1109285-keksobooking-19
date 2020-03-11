@@ -20,28 +20,26 @@
     }
     return showFilters;
   };
-
   var set = function () { // что происходит при нажатии на главную метку
     mainPin.draggable = true;
     document.querySelector('.map').classList.remove('map--faded');
     document.querySelector('.ad-form').classList.remove('ad-form--disabled');
     showFieldset();
     showFilters();
-    window.backend.load(function (similarpin) { // отрисовка меток на карте
-      var fragment = document.createDocumentFragment();
-      for (var i = 0; i < similarpin.length; i++) {
-        fragment.appendChild(window.pin.renderSimilar(similarpin[i]));
-      }
-      window.pin.list.appendChild(fragment);
-    });
+    var fragment = document.createDocumentFragment();
+    for (var i = 0; i < window.data.allPins.length; i++) {
+      fragment.appendChild(window.pin.renderSimilar(window.data.allPins[i]));
+    }
+    window.pin.list.appendChild(fragment);
+
   };
 
   window.activeMode = {
     set: set,
     mainPin: mainPin,
     formFieldset: formFieldset,
-    allFilters: allFilters
-
+    allFilters: allFilters,
   };
+
 })();
 

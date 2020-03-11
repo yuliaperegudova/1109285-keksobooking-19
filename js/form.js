@@ -119,4 +119,27 @@
   };
 
   roomNumberSelect.addEventListener('change', onRoomNumberSelect);
+
+  var form = document.querySelector('.ad-form');
+  form.addEventListener('submit', function (evt) {
+    window.upload(new FormData(form), function () {
+      form.reset();
+      form.classList.add('ad-form--disabled');
+      document.querySelector('.map').classList.add('map--faded');
+    });
+    var successTemplate = document.querySelector('#success').content.querySelector('.success');
+    var successMessage = successTemplate.cloneNode(true);
+    document.body.insertAdjacentElement('afterbegin', successMessage);
+    evt.preventDefault();
+    document.addEventListener('click', function () {
+      var message = document.querySelector('.success');
+      message.remove();
+    });
+  });
+
+  var resetButton = document.querySelector('.ad-form__reset');
+  resetButton.addEventListener('click', function () {
+    form.reset();
+  });
+
 })();

@@ -9,29 +9,32 @@
   };
 
   var openPopup = function () { // открыть и закрыть карточку
+    var popup = document.querySelector('.popup');
+    if (popup !== null) {
+      popup.remove();
+    }
     document.addEventListener('keydown', onPopupEscPress);
 
-    window.backend.load(function (similarpin) { // отрисовка карточки
-      var activePin = document.querySelector('.map__pin--active');
-      var index = activePin.value;
-      mapSection.insertBefore(window.card.renderCard(similarpin[index]), beforeElement);
+    // отрисовка карточки
+    var activePin = document.querySelector('.map__pin--active');
+    var index = activePin.value;
+    mapSection.insertBefore(window.card.renderCard(window.data.allPins[index]), beforeElement);
 
-      var cardClose = document.querySelector('.popup__close');
+    var cardClose = document.querySelector('.popup__close');
 
-      cardClose.addEventListener('click', function () {
-        closePopup();
-      });
-      cardClose.addEventListener('keydown', function (evt) {
-        window.util.isEnterEvent(evt, closePopup);
-      });
+    cardClose.addEventListener('click', function () {
+      closePopup();
+    });
+    cardClose.addEventListener('keydown', function (evt) {
+      window.util.isEnterEvent(evt, closePopup);
     });
   };
 
   var closePopup = function () {
     var card = document.querySelector('.popup');
-    card.remove();
     var checkedPin = document.querySelector('.map__pin--active');
     checkedPin.classList.remove('map__pin--active');
+    card.remove();
     document.removeEventListener('keydown', onPopupEscPress);
   };
 
