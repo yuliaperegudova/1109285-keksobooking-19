@@ -26,12 +26,6 @@
     document.querySelector('.ad-form').classList.remove('ad-form--disabled');
     showFieldset();
     showFilters();
-    var fragment = document.createDocumentFragment();
-    for (var i = 0; i < window.data.allPins.length; i++) {
-      fragment.appendChild(window.pin.renderSimilar(window.data.allPins[i]));
-    }
-    window.pin.list.appendChild(fragment);
-
   };
 
   window.activeMode = {

@@ -27,8 +27,16 @@
     return pinElement;
   };
 
+  var render = function (data) {
+    var fragment = document.createDocumentFragment();
+    for (var i = 0; i < data.length; i++) {
+      fragment.appendChild(renderSimilar(data[i]));
+    }
+    window.pin.list.appendChild(fragment);
+  };
+
   window.pin = {
     list: list,
-    renderSimilar: renderSimilar,
+    render: render
   };
 })();
