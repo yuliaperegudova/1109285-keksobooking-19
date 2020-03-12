@@ -40,6 +40,7 @@
 
   window.cardDialog = {
     openPopup: openPopup,
+    closePopup: closePopup
   };
 
 })();
