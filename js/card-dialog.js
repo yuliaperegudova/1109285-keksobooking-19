@@ -8,16 +8,15 @@
     window.util.isEscEvent(evt, closePopup);
   };
 
-  var openPopup = function () { // открыть и закрыть карточку
+  var openPopup = function () {
     var popup = document.querySelector('.popup');
     if (popup !== null) {
       popup.remove();
     }
     document.addEventListener('keydown', onPopupEscPress);
 
-    // отрисовка карточки
     var activePin = document.querySelector('.map__pin--active');
-    var index = activePin.value;
+    var index = activePin.id;
     mapSection.insertBefore(window.card.renderCard(window.data.allPins[index]), beforeElement);
 
     var cardClose = document.querySelector('.popup__close');

@@ -3,7 +3,7 @@
   var MIN_LEFT = 150;
   var MAX_RIGHT = 1280;
   var MIN_TOP = 150;
-  var MAX_BOTTOM = 300;
+  var MAX_BOTTOM = 630;
 
   var mainPin = document.querySelector('.map__pin--main');
 
@@ -50,7 +50,10 @@
 
     document.addEventListener('mousemove', onMouseMove);
     window.addEventListener('mouseup', onMouseUp);
-  });
 
+    var address = document.querySelector('#address');
+    address.setAttribute('value', startCoords.x + ' , ' + startCoords.y);
+
+  });
 
 })();

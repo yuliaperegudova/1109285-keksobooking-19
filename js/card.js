@@ -5,7 +5,7 @@
     .content
     .querySelector('.map__card');
 
-  var allFeatures = cardTemplate.querySelectorAll('.popup__feature'); // прячем фичи
+  var allFeatures = cardTemplate.querySelectorAll('.popup__feature');
 
   var hideFeatures = function () {
     for (var j = 0; j < allFeatures.length; j++) {
@@ -13,11 +13,11 @@
     }
   };
 
-  var renderCard = function (similarpin) { // функция отрисовки карточки
-    var photos = similarpin.offer.photos;
-    var features = similarpin.offer.features;
+  var renderCard = function (similarPin) {
+    var photos = similarPin.offer.photos;
+    var features = similarPin.offer.features;
 
-    var showFeatures = function (feature) { // создаем новые фичи
+    var showFeatures = function (feature) {
       for (var j = 0; j < allFeatures.length; j++) {
         var featureElement = cardTemplate.querySelector('.popup__feature--' + feature);
         if (features[j] === feature) {
@@ -36,14 +36,14 @@
     };
     renderFeatures();
     var cardElement = cardTemplate.cloneNode(true);
-    cardElement.querySelector('.popup__title').textContent = similarpin.offer.title;
-    cardElement.querySelector('.popup__text--address').textContent = similarpin.offer.address;
-    cardElement.querySelector('.popup__text--price').textContent = similarpin.offer.price + ' ₽/ночь';
-    cardElement.querySelector('.popup__type').textContent = similarpin.offer.type.name;
-    cardElement.querySelector('.popup__text--capacity').textContent = similarpin.offer.rooms + ' комнаты для ' + similarpin.offer.guests + ' гостей';
-    cardElement.querySelector('.popup__text--time').textContent = 'Заезд после ' + similarpin.offer.checkin + ', выезд до ' + similarpin.offer.checkout;
-    cardElement.querySelector('.popup__description').textContent = similarpin.offer.description;
-    cardElement.querySelector('.popup__avatar').src = similarpin.author.avatar;
+    cardElement.querySelector('.popup__title').textContent = similarPin.offer.title;
+    cardElement.querySelector('.popup__text--address').textContent = similarPin.offer.address;
+    cardElement.querySelector('.popup__text--price').textContent = similarPin.offer.price + ' ₽/ночь';
+    cardElement.querySelector('.popup__type').textContent = similarPin.offer.type.name;
+    cardElement.querySelector('.popup__text--capacity').textContent = similarPin.offer.rooms + ' комнаты для ' + similarPin.offer.guests + ' гостей';
+    cardElement.querySelector('.popup__text--time').textContent = 'Заезд после ' + similarPin.offer.checkin + ', выезд до ' + similarPin.offer.checkout;
+    cardElement.querySelector('.popup__description').textContent = similarPin.offer.description;
+    cardElement.querySelector('.popup__avatar').src = similarPin.author.avatar;
     var photoList = cardElement.querySelector('.popup__photos');
     var photoTemplate = cardElement.querySelector('.popup__photo');
     photoList.textContent = '';

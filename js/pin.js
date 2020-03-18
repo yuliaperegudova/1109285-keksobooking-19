@@ -1,4 +1,4 @@
-'use strict'; // рисуем метки на карте
+'use strict';
 
 (function () {
   var list = document.querySelector('.map__pins');
@@ -8,12 +8,12 @@
       .content
       .querySelector('.map__pin');
 
-  var renderSimilar = function (similarpin) {
+  var renderSimilar = function (similarPin) {
     var pinElement = pinElementTemplate.cloneNode(true);
-    pinElement.style = 'left: ' + similarpin.location.x + 'px; top: ' + similarpin.location.y + 'px;';
-    pinElement.querySelector('img').src = similarpin.author.avatar;
-    pinElement.alt = similarpin.offer.title;
-    pinElement.value = counter += 1;
+    pinElement.style = 'left: ' + similarPin.location.x + 'px; top: ' + similarPin.location.y + 'px;';
+    pinElement.querySelector('img').src = similarPin.author.avatar;
+    pinElement.alt = similarPin.offer.title;
+    pinElement.id = counter += 1;
 
     pinElement.addEventListener('click', function (evt) {
       evt.currentTarget.classList.add('map__pin--active');
@@ -29,7 +29,8 @@
 
   var render = function (data) {
     var fragment = document.createDocumentFragment();
-    for (var i = 0; i < data.length; i++) {
+    var maxPinAmount = data.length > 5 ? 5 : data.length;
+    for (var i = 0; i < maxPinAmount; i++) {
       fragment.appendChild(renderSimilar(data[i]));
     }
     window.pin.list.appendChild(fragment);
@@ -37,6 +38,6 @@
 
   window.pin = {
     list: list,
-    render: render
+    render: render,
   };
 })();

@@ -1,6 +1,5 @@
 'use strict';
 
-// связали тип жилья и минимальную цену
 (function () {
   var typeForm = document.querySelector('#type');
   var priceInput = document.querySelector('#price');
@@ -33,8 +32,6 @@
     }
   });
 
-  // время заезда и время выезда
-
   var timeIn = document.querySelector('#timein');
   var timeOut = document.querySelector('#timeout');
   var timeOutOptions = timeOut.querySelectorAll('option');
@@ -56,13 +53,9 @@
     }
   });
 
-  // связали количество мест и количество комнат
-
   var roomNumberSelect = document.querySelector('#room_number');
   var capacitySelect = document.querySelector('#capacity');
   var capacityOptions = capacitySelect.querySelectorAll('option');
-
-  // функция отмены disabled для всех вариантов
 
   var showAllOptions = function () {
     for (var a = 0; a < capacityOptions.length; a++) {
@@ -70,12 +63,10 @@
     }
   };
 
-  // условия для каждой комнаты
-
   var room1 = function () {
     capacityOptions[2].selected = true;
     showAllOptions();
-    capacityOptions[0].setAttribute('disabled', true); // нужно посмотреть, как пропускать елемент
+    capacityOptions[0].setAttribute('disabled', true);
     capacityOptions[1].setAttribute('disabled', true);
     capacityOptions[3].setAttribute('disabled', true);
   };
@@ -100,8 +91,6 @@
     capacityOptions[1].setAttribute('disabled', true);
     capacityOptions[2].setAttribute('disabled', true);
   };
-
-  // вызов функции, чтобы до события клик все работало
 
   room1();
 
