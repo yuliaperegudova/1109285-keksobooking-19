@@ -7,25 +7,26 @@
   address.setAttribute('value', '570, 375');
   var allFilters = document.querySelectorAll('.map__filter');
 
-  var showFieldset = function () { // сделать форму активной
+  var showFieldset = function () {
     for (var j = 0; j < formFieldset.length; j++) {
       formFieldset[j].removeAttribute('disabled', 'disabled');
     }
     return showFieldset;
   };
 
-  var showFilters = function () { // сделать фильтры активными
+  var showFilters = function () {
     for (var j = 0; j < allFilters.length; j++) {
       allFilters[j].removeAttribute('disabled', 'disabled');
     }
     return showFilters;
   };
-  var set = function () { // что происходит при нажатии на главную метку
+  var set = function () {
     mainPin.draggable = true;
     document.querySelector('.map').classList.remove('map--faded');
     document.querySelector('.ad-form').classList.remove('ad-form--disabled');
     showFieldset();
     showFilters();
+    window.pin.render(window.data.allPins);
   };
 
   window.activeMode = {
