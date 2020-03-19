@@ -107,14 +107,29 @@
     }
   };
 
+  var removePins = function () {
+    var renderedPins = document.querySelectorAll('.map__pin');
+    var mainPin = document.querySelector('.map__pin--main');
+    renderedPins.forEach(function (it) {
+      if (it !== mainPin) {
+        it.remove();
+      }
+    });
+  };
+
+  var reset = function () {
+    form.reset();
+    form.classList.add('ad-form--disabled');
+    document.querySelector('.map').classList.add('map--faded');
+    removePins();
+  };
+
   roomNumberSelect.addEventListener('change', onRoomNumberSelect);
 
   var form = document.querySelector('.ad-form');
   form.addEventListener('submit', function (evt) {
     window.upload(new FormData(form), function () {
-      form.reset();
-      form.classList.add('ad-form--disabled');
-      document.querySelector('.map').classList.add('map--faded');
+      reset();
     });
     var successTemplate = document.querySelector('#success').content.querySelector('.success');
     var successMessage = successTemplate.cloneNode(true);
@@ -123,12 +138,14 @@
     document.addEventListener('click', function () {
       var message = document.querySelector('.success');
       message.remove();
+      document.removeEventListener('click');
     });
   });
 
   var resetButton = document.querySelector('.ad-form__reset');
   resetButton.addEventListener('click', function () {
     form.reset();
+    reset();
   });
 
 })();
