@@ -1,49 +1,43 @@
 'use strict';
 
 (function () {
+  var map = document.querySelector('.map');
+  var mapFiltertsContainer = document.querySelector('.map__filters-container');
   var cardTemplate = document.querySelector('#card')
     .content
     .querySelector('.map__card');
 
-  var allFeatures = cardTemplate.querySelectorAll('.popup__feature');
-
-  var hideFeatures = function () {
-    for (var j = 0; j < allFeatures.length; j++) {
-      allFeatures[j].classList.add('visually-hidden');
-    }
-  };
-
   var renderCard = function (similarPin) {
-    var photos = similarPin.offer.photos;
-    var features = similarPin.offer.features;
 
-    var showFeatures = function (feature) {
-      for (var j = 0; j < allFeatures.length; j++) {
-        var featureElement = cardTemplate.querySelector('.popup__feature--' + feature);
-        if (features[j] === feature) {
-          featureElement.textContent = feature;
-          featureElement.classList.remove('visually-hidden');
-        }
-      }
-      return featureElement;
-    };
-
-    var renderFeatures = function () {
-      hideFeatures();
-      for (var a = 0; a < features.length; a++) {
-        showFeatures(features[a]);
-      }
-    };
-    renderFeatures();
     var cardElement = cardTemplate.cloneNode(true);
     cardElement.querySelector('.popup__title').textContent = similarPin.offer.title;
     cardElement.querySelector('.popup__text--address').textContent = similarPin.offer.address;
     cardElement.querySelector('.popup__text--price').textContent = similarPin.offer.price + ' ₽/ночь';
-    cardElement.querySelector('.popup__type').textContent = similarPin.offer.type.name;
+    cardElement.querySelector('.popup__type').textContent = similarPin.offer.type.name; // поправить?
     cardElement.querySelector('.popup__text--capacity').textContent = similarPin.offer.rooms + ' комнаты для ' + similarPin.offer.guests + ' гостей';
     cardElement.querySelector('.popup__text--time').textContent = 'Заезд после ' + similarPin.offer.checkin + ', выезд до ' + similarPin.offer.checkout;
     cardElement.querySelector('.popup__description').textContent = similarPin.offer.description;
     cardElement.querySelector('.popup__avatar').src = similarPin.author.avatar;
+
+    var popupFeatures = cardElement.querySelector('.popup__features');
+    var popupFeatureTemplate = Array.from(popupFeatures.childNodes);
+    var features = similarPin.offer.features;
+
+    popupFeatureTemplate.forEach(function (child) {
+      if (child.nodeType === 1) {
+        if (features.some(function (feature) {
+          return child.classList.contains('popup__feature--' + feature);
+        })) {
+          child.classList.add('popup__feature--visible');
+          child.style.display = 'inline-block';
+        } else {
+          child.classList.remove('popup__feature--visible');
+          child.style.display = 'none';
+        }
+      }
+    });
+
+    var photos = similarPin.offer.photos;
     var photoList = cardElement.querySelector('.popup__photos');
     var photoTemplate = cardElement.querySelector('.popup__photo');
     photoList.textContent = '';
@@ -54,8 +48,37 @@
     }
     return cardElement;
   };
+
+  var show = function (similarPin) {
+    map.insertBefore(renderCard(similarPin), mapFiltertsContainer);
+
+    var cardClose = document.querySelector('.popup__close');
+    cardClose.addEventListener('click', closePopup);
+    document.addEventListener('keydown', onPopupEscPress);
+  };
+
+  var onPopupEscPress = function (evt) {
+    window.util.isEscEvent(evt, closePopup);
+  };
+
+  var closePopup = function () {
+    var card = document.querySelector('.popup');
+    card.remove();
+    document.removeEventListener('keydown', onPopupEscPress);
+    var activePin = document.querySelector('.map__pin--active');
+    activePin.classList.remove('map__pin--active');
+  };
+
+  var remove = function () {
+    var card = document.querySelector('.map__card');
+    if (card) {
+      card.remove();
+    }
+  };
+
   window.card = {
-    renderCard: renderCard
+    show: show,
+    remove: remove
   };
 
 })();

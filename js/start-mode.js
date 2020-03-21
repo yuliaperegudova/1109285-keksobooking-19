@@ -24,8 +24,21 @@
   disabledMode();
 
   window.activeMode.mainPin.addEventListener('mousedown', function () {
-    window.activeMode.set();
+    if (window.activeMode.mainPin.draggable !== true) {
+      window.activeMode.set();
+    }
   });
+
+  var onEnterPress = function (evt) {
+    window.util.isEnterEvent(evt, function () {
+      if (window.activeMode.mainPin.draggable !== true) {
+        window.activeMode.set();
+      }
+      document.removeEventListener('keydown', onEnterPress);
+    });
+  };
+
+  document.addEventListener('keydown', onEnterPress);
 
   window.startMode = {
     disabledMode: disabledMode

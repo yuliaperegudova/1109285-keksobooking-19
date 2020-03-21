@@ -1,23 +1,20 @@
 'use strict';
 (function () {
-  window.debounce = function (timeout, callback) {
-    var tm = 0;
-    var tailCall = false;
-    var fire = function () {
-      tm = 0;
-      if (tailCall) {
-        callback();
-        tm = setTimeout(fire, timeout);
-      }
-      tailCall = false;
-    };
+
+  var DEBOUNCE_INTERVAL = 500;
+
+  window.debounce = function (cb) {
+    var lastTimeout = null;
+
     return function () {
-      if (!tm) {
-        callback();
-        tm = setTimeout(fire, timeout);
-      } else {
-        tailCall = true;
+      var parameters = arguments;
+      if (lastTimeout) {
+        window.clearTimeout(lastTimeout);
       }
+      lastTimeout = window.setTimeout(function () {
+        cb.apply(null, parameters);
+      }, DEBOUNCE_INTERVAL);
     };
   };
+
 })();

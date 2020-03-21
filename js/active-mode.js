@@ -1,10 +1,15 @@
 'use strict';
 
 (function () {
+  var MAIN_PIN_DEFOLT = {
+    X: 570,
+    Y: 375
+  };
+
   var mainPin = document.querySelector('.map__pin--main');
   var formFieldset = document.querySelectorAll('fieldset');
   var address = document.querySelector('#address');
-  address.setAttribute('value', '570, 375');
+  address.setAttribute('value', MAIN_PIN_DEFOLT.X + ', ' + MAIN_PIN_DEFOLT.Y);
   var allFilters = document.querySelectorAll('.map__filter');
 
   var showFieldset = function () {
@@ -35,6 +40,11 @@
     formFieldset: formFieldset,
     allFilters: allFilters,
   };
+
+  var filters = document.querySelector('.map__filters');
+  filters.addEventListener('change', function () {
+    window.debounce(window.filter.updatePins());
+  });
 
 })();
 

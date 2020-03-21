@@ -1,87 +1,88 @@
 'use strict';
 
 (function () {
-
-  var PRICE_LEVEL = ['low', 'middle', 'high'];
-  var Price = {
+  var PRICE = {
     low: 10000,
     high: 50000
   };
+  var filters = document.querySelector('.map__filters');
 
-  var getPriceLevel = function (price) {
-    var i = 1;
-    if (price < Price.low) {
-      i = 0;
-    }
-    if (price > Price.high) {
-      i = 2;
-    }
-    return PRICE_LEVEL[i];
+  var filterByType = function (data, value, filterType) {
+    return data.filter(function (item) {
+      return item.offer[filterType].toString() === value;
+    });
   };
 
-  var filter = {
-    housingType: 'any',
-    roomsType: 'any',
-    guestType: 'any',
-    priceType: 'any',
+  var priceLevel = {
+    'low': function (price) {
+      return price < PRICE.low;
+    },
+    'middle': function (price) {
+      return price >= PRICE.low && price <= PRICE.high;
+    },
+    'high': function (price) {
+      return price > PRICE.high;
+    }
   };
 
-  var updatePins = function () {
-    var renderedPins = document.querySelectorAll('.map__pin');
-    var mainPin = document.querySelector('.map__pin--main');
-    renderedPins.forEach(function (it) {
-      if (it !== mainPin) {
-        it.remove();
+  var filterByPrice = function (data, priceValue) {
+    return data.filter(function (item) {
+      return priceLevel[priceValue](item.offer.price);
+    });
+  };
+
+  var filterByFeatures = function (data, featureValue) {
+    return data.filter(function (item) {
+      return item.offer.features.includes(featureValue);
+    });
+  };
+
+  var updateFilters = function (data) {
+    var selects = filters.querySelectorAll('select');
+    var inputChecked = filters.querySelectorAll('.map__checkbox:checked');
+
+    selects = Array.from(selects).filter(function (it) {
+      return it.value !== 'any';
+    });
+
+    var copyData = data.slice();
+
+    selects.forEach(function (it) {
+      switch (it.id) {
+        case 'housing-type':
+          copyData = filterByType(copyData, it.value, 'type');
+          break;
+        case 'housing-rooms':
+          copyData = filterByType(copyData, it.value, 'rooms');
+          break;
+        case 'housing-guests':
+          copyData = filterByType(copyData, it.value, 'guests');
+          break;
+        case 'housing-price':
+          copyData = filterByPrice(copyData, it.value);
+          break;
       }
     });
 
-    var sameHousingPins = window.data.allPins.filter(function (it) {
-      return (filter.housingType !== 'any' ? it.offer.type === filter.housingType : window.data.allPins)
-      && (filter.roomsType !== 'any' ? it.offer.rooms === +filter.roomsType : window.data.allPins)
-      && (filter.guestType !== 'any' ? it.offer.guests === +filter.guestType : window.data.allPins)
-      && (filter.priceType !== 'any' ? getPriceLevel(it.offer.price) === filter.priceType : window.data.allPins);
-
+    inputChecked.forEach(function (it) {
+      copyData = filterByFeatures(copyData, it.value);
     });
-    window.pin.render(sameHousingPins);
+
+    return copyData;
   };
 
-  var removeCard = function () {
-    var popup = document.querySelector('.popup');
-    if (popup !== null) {
-      window.cardDialog.closePopup();
-      popup.remove();
-    }
+  var resetFilters = function () {
+    filters.reset();
   };
 
-  var housingTypeFilter = document.querySelector('#housing-type');
-  housingTypeFilter.addEventListener('change', function (evt) {
-    removeCard();
-    var newHousingType = evt.target.value;
-    filter.housingType = newHousingType;
-    updatePins();
-  });
+  var updatePins = function () {
+    window.pin.removePins();
+    window.card.remove();
+    window.pin.render(updateFilters(window.data.allPins));
+  };
 
-  var roomsFilter = document.querySelector('#housing-rooms');
-  roomsFilter.addEventListener('change', function (evt) {
-    removeCard();
-    var newRoomsType = evt.target.value;
-    filter.roomsType = newRoomsType;
-    updatePins();
-  });
-
-  var guestFilter = document.querySelector('#housing-guests');
-  guestFilter.addEventListener('change', function (evt) {
-    removeCard();
-    var newGuestType = evt.target.value;
-    filter.guestType = newGuestType;
-    updatePins();
-  });
-
-  var priceFilter = document.querySelector('#housing-price');
-  priceFilter.addEventListener('change', function (evt) {
-    removeCard();
-    var newPriceType = evt.target.value;
-    filter.priceType = newPriceType;
-    updatePins();
-  });
+  window.filter = {
+    updatePins: updatePins,
+    resetFilters: resetFilters
+  };
 })();
