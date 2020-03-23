@@ -8,7 +8,7 @@
   var filters = document.querySelector('.map__filters');
 
   var filterByType = function (data, value, filterType) {
-    return data.filter(function (item) {
+    return data.filter(function (item) { // смотреть здесь
       return item.offer[filterType].toString() === value;
     });
   };
@@ -75,14 +75,9 @@
     filters.reset();
   };
 
-  var updatePins = function () {
-    window.pin.removePins();
-    window.card.remove();
-    window.pin.render(updateFilters(window.data.allPins));
-  };
-
   window.filter = {
-    updatePins: updatePins,
+    updateFilters: updateFilters,
     resetFilters: resetFilters
   };
+
 })();

@@ -114,24 +114,20 @@
     document.querySelector('.map').classList.add('map--faded');
     removePins();
     window.startMode.disabledMode();
+    window.card.remove();
+    window.dnd.addCoords();
   };
 
   var form = document.querySelector('.ad-form');
   form.addEventListener('submit', function (evt) {
-    window.backend.upload(new FormData(form), function (response) {
-      if (response) {
-        window.backend.onSuccess();
-        reset();
-      } else {
-        window.backend.onError();
-      }
-    });
+    window.backend.upload(new FormData(form), window.backend.onSuccess, window.data.createErrorPopup);
+    reset();
     evt.preventDefault();
   });
+
   var resetButton = document.querySelector('.ad-form__reset');
   resetButton.addEventListener('click', function () {
     reset();
   });
 
 })();
-

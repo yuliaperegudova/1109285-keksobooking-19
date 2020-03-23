@@ -1,15 +1,9 @@
 'use strict';
 
 (function () {
-  var MAIN_PIN_DEFOLT = {
-    X: 570,
-    Y: 375
-  };
 
   var mainPin = document.querySelector('.map__pin--main');
   var formFieldset = document.querySelectorAll('fieldset');
-  var address = document.querySelector('#address');
-  address.setAttribute('value', MAIN_PIN_DEFOLT.X + ', ' + MAIN_PIN_DEFOLT.Y);
   var allFilters = document.querySelectorAll('.map__filter');
 
   var showFieldset = function () {
@@ -31,8 +25,12 @@
     document.querySelector('.ad-form').classList.remove('ad-form--disabled');
     showFieldset();
     showFilters();
-    window.pin.render(window.data.allPins);
+    window.data.load();
+    window.dnd.addCoords();
   };
+
+  var filters = document.querySelector('.map__filters');
+  filters.addEventListener('change', window.debounce(window.data.updatePins));
 
   window.activeMode = {
     set: set,
@@ -41,10 +39,6 @@
     allFilters: allFilters,
   };
 
-  var filters = document.querySelector('.map__filters');
-  filters.addEventListener('change', function () {
-    window.debounce(window.filter.updatePins());
-  });
-
 })();
+
 
