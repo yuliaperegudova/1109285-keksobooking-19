@@ -17,17 +17,29 @@
     'palace': 10000
   };
 
+  var BORDER_COLOR = {
+    valid: '#d9d9d3',
+    invalid: '#ff0000'
+  };
+
   var titleInput = document.querySelector('#title');
   var typeInput = document.querySelector('#type');
   var priceInput = document.querySelector('#price');
 
+  var setBorder = function (element, color) {
+    element.style.border = '1px solid' + color;
+  };
+
   var checkTitle = function () {
     if (titleInput.value.length < TITLE_LENGTH.min) {
       titleInput.setCustomValidity('Слишком короткое название');
+      setBorder(titleInput, BORDER_COLOR.invalid);
     } else if (titleInput.value.length > TITLE_LENGTH.max) {
       titleInput.setCustomValidity('Слишком длинное название');
+      setBorder(titleInput, BORDER_COLOR.invalid);
     } else {
       titleInput.setCustomValidity('');
+      setBorder(titleInput, BORDER_COLOR.valid);
     }
   };
 
@@ -45,8 +57,10 @@
 
     if (priceValue < TYPE_PRICE[type.value]) {
       price.setCustomValidity('Минимальная цена: ' + TYPE_PRICE[type.value]);
+      setBorder(price, BORDER_COLOR.invalid);
     } else {
       price.setCustomValidity('');
+      setBorder(price, BORDER_COLOR.valid);
     }
   };
 
@@ -83,12 +97,16 @@
 
     if ((rooms < guests) && (rooms !== MAX_ROOM_VALUE) && (guests !== MIN_CAPACITY_VALUE)) {
       capacitySelect.setCustomValidity('Максимальное число гостей: ' + rooms);
+      setBorder(capacitySelect, BORDER_COLOR.invalid);
     } else if ((rooms === MAX_ROOM_VALUE) && (guests !== MIN_CAPACITY_VALUE)) {
       capacitySelect.setCustomValidity('Не для гостей');
+      setBorder(capacitySelect, BORDER_COLOR.invalid);
     } else if ((guests === MIN_CAPACITY_VALUE) && (rooms !== MAX_ROOM_VALUE)) {
       capacitySelect.setCustomValidity('Размещение невозможно. Выберите большее количество комнат');
+      setBorder(capacitySelect, BORDER_COLOR.invalid);
     } else {
       capacitySelect.setCustomValidity('');
+      setBorder(capacitySelect, BORDER_COLOR.valid);
     }
   };
 
@@ -120,7 +138,7 @@
 
   var form = document.querySelector('.ad-form');
   form.addEventListener('submit', function (evt) {
-    window.backend.upload(new FormData(form), window.backend.onSuccess, window.data.createErrorPopup);
+    window.upload(new FormData(form), window.backend.onSuccess, window.data.createErrorPopup);
     reset();
     evt.preventDefault();
   });
@@ -129,5 +147,9 @@
   resetButton.addEventListener('click', function () {
     reset();
   });
+
+  window.form = {
+    reset: reset
+  };
 
 })();

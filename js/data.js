@@ -18,7 +18,7 @@
   };
 
   var load = function () {
-    window.backend.load(onSuccess, onError);
+    window.load(onSuccess, onError);
   };
 
   var createErrorPopup = function (errorMessage) {
@@ -32,6 +32,9 @@
 
   var onErrorClick = function () {
     closeErrorPopup();
+    window.form.reset();
+
+
   };
 
   var onErrorEscPress = function (evt) {
