@@ -32,9 +32,7 @@
 
   var onErrorClick = function () {
     closeErrorPopup();
-    window.form.reset();
-
-
+    // window.form.reset();
   };
 
   var onErrorEscPress = function (evt) {

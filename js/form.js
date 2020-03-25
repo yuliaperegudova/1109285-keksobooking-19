@@ -133,13 +133,12 @@
     removePins();
     window.startMode.disabledMode();
     window.card.remove();
-    window.dnd.addCoords();
+    window.dnd.getAddress();
   };
 
   var form = document.querySelector('.ad-form');
   form.addEventListener('submit', function (evt) {
     window.upload(new FormData(form), window.backend.onSuccess, window.data.createErrorPopup);
-    reset();
     evt.preventDefault();
   });
 

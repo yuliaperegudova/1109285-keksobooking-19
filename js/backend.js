@@ -72,6 +72,7 @@
   };
 
   var onSuccess = function () {
+    window.form.reset();
     var removeMessage = function () {
       successMessage.removeEventListener('click', removeMessage);
       successMessage.remove();
