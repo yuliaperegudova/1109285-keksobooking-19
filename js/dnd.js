@@ -1,43 +1,24 @@
 'use strict';
+
 (function () {
-  var PIN_WIDTH = 60;
-  var PIN_HEIGHT = 80;
-
-  var MAIN_PIN_DEFOLT = {
-    X: 570,
-    Y: 375
+  var MAIN_PIN = {
+    width: 65,
+    height: 65,
+    tail: 15
   };
 
-  var COORDS_LIMIT = {
-    minX: 0,
-    maxX: 1135,
-    minY: 70,
-    maxY: 620
-  };
+  var MIN_Y = 130;
+  var MAX_Y = 630;
+  var MAX_X = 1200;
+  var MIN_X = 0;
 
   var mainPin = document.querySelector('.map__pin--main');
   var address = document.querySelector('#address');
 
-  var getCoords = function () {
-    return {
-      x: Math.floor(parseInt(mainPin.style.left, 10)),
-      y: Math.floor(parseInt(mainPin.style.top, 10))
-    };
-  };
-
-  var addCoords = function () {
-    var coordinates = getCoords();
-    var x = coordinates.x + PIN_WIDTH / 2;
-    var y = coordinates.y + PIN_HEIGHT;
-
-    if (mainPin.draggable === true) {
-      address.value = x + ', ' + y;
-    } else {
-      address.value = MAIN_PIN_DEFOLT.X + ', ' + MAIN_PIN_DEFOLT.Y;
-    }
-  };
-
-  addCoords();
+  var rightLimit = Math.round((parseInt(MAX_X, 10) - (parseInt(MAIN_PIN.width, 10) / 2)));
+  var leftLimit = Math.round(MIN_X - (parseInt(MAIN_PIN.width, 10) / 2));
+  var topLimit = MIN_Y - MAIN_PIN.height - MAIN_PIN.tail;
+  var bottomLimit = MAX_Y - MAIN_PIN.height - MAIN_PIN.tail;
 
   mainPin.addEventListener('mousedown', function (evt) {
     evt.preventDefault();
@@ -55,33 +36,30 @@
         y: startCoords.y - moveEvt.clientY
       };
 
-      var mapPinPosition = {
-        x: mainPin.offsetLeft - shift.x,
-        y: mainPin.offsetTop - shift.y
-      };
-
       startCoords = {
         x: moveEvt.clientX,
         y: moveEvt.clientY
       };
 
-      mainPin.style.top = mapPinPosition.y + 'px';
-      mainPin.style.left = mapPinPosition.x + 'px';
+      var shiftX = mainPin.offsetLeft - shift.x;
+      var shiftY = mainPin.offsetTop - shift.y;
 
-      if (mapPinPosition.x < COORDS_LIMIT.minX) {
-        mainPin.style.left = COORDS_LIMIT.minX + 'px';
-      }
-      if (mapPinPosition.x > COORDS_LIMIT.maxX) {
-        mainPin.style.left = COORDS_LIMIT.maxX + 'px';
-      }
-      if (mapPinPosition.y < COORDS_LIMIT.minY) {
-        mainPin.style.top = COORDS_LIMIT.minY + 'px';
-      }
-      if (mapPinPosition.y > COORDS_LIMIT.maxY) {
-        mainPin.style.top = COORDS_LIMIT.maxY + 'px';
+      if (shiftX > rightLimit) {
+        shiftX = rightLimit;
+      } else if (shiftX < leftLimit) {
+        shiftX = leftLimit;
       }
 
-      addCoords();
+      if (shiftY < topLimit) {
+        shiftY = topLimit;
+      } else if (shiftY >= bottomLimit) {
+        shiftY = bottomLimit;
+      }
+
+      mainPin.style.top = shiftY + 'px';
+      mainPin.style.left = shiftX + 'px';
+
+      getAddress(true);
     };
 
     var onMouseUp = function (upEvt) {
@@ -93,11 +71,18 @@
 
     document.addEventListener('mousemove', onMouseMove);
     document.addEventListener('mouseup', onMouseUp);
-
   });
 
+  var getAddress = function (isTail) {
+    var fullHeight = isTail ? parseInt(MAIN_PIN.height, 10) + parseInt(MAIN_PIN.tail, 10)
+      : Math.round(parseInt(MAIN_PIN.height, 10) / 2);
+
+    address.value = parseInt(mainPin.style.left, 10) + Math.floor(parseInt(MAIN_PIN.width, 10) / 2) + ', '
+       + (parseInt(mainPin.style.top, 10) + parseInt(fullHeight, 10));
+  };
+
   window.dnd = {
-    addCoords: addCoords
+    getAddress: getAddress
   };
 
 })();

@@ -127,7 +127,7 @@
 
   var reset = function () {
     form.reset();
-    window.filter.resetFilters();
+    window.filters.reset();
     form.classList.add('ad-form--disabled');
     document.querySelector('.map').classList.add('map--faded');
     removePins();

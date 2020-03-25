@@ -2,11 +2,6 @@
 
 (function () {
 
-  var MAIN_PIN_DEFOLT = {
-    X: 570,
-    Y: 375
-  };
-
   var hideFieldset = function () {
     for (var j = 0; j < window.activeMode.formFieldset.length; j++) {
       window.activeMode.formFieldset[j].setAttribute('disabled', 'disabled');
@@ -25,7 +20,7 @@
     hideFieldset();
     hideFilters();
     window.activeMode.mainPin.draggable = false;
-    window.activeMode.mainPin.style = 'left:' + MAIN_PIN_DEFOLT.X + 'px; top:' + MAIN_PIN_DEFOLT.Y + 'px';
+    window.dnd.getAddress(false);
   };
 
   disabledMode();

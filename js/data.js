@@ -10,7 +10,7 @@
 
   var onSuccess = function (data) {
     window.data.allPins = data;
-    window.pin.render(window.filter.updateFilters(window.data.allPins));
+    window.pin.render(window.filters.update(window.data.allPins));
   };
 
   var onError = function (message) {
@@ -51,7 +51,7 @@
   var updatePins = function () {
     window.pin.removePins();
     window.card.remove();
-    window.pin.render(window.filter.updateFilters(window.data.allPins));
+    window.pin.render(window.filters.update(window.data.allPins));
   };
 
   window.data = {

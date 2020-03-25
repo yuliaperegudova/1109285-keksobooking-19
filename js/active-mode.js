@@ -26,7 +26,7 @@
     showFieldset();
     showFilters();
     window.data.load();
-    window.dnd.addCoords();
+    window.dnd.getAddress(true);
   };
 
   var filters = document.querySelector('.map__filters');
