@@ -133,7 +133,7 @@
     removePins();
     window.startMode.disabledMode();
     window.card.remove();
-    window.dnd.getAddress();
+    window.dnd.getAddress(false);
   };
 
   var form = document.querySelector('.ad-form');

@@ -81,6 +81,7 @@
        + (parseInt(mainPin.style.top, 10) + parseInt(fullHeight, 10));
   };
 
+
   window.dnd = {
     getAddress: getAddress
   };

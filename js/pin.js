@@ -1,7 +1,6 @@
 'use strict';
 
 (function () {
-  var MAX_PIN_AMOUNT = 5;
   var PIN_WIDTH = 50;
   var PIN_HEIHGT = 70;
   var list = document.querySelector('.map__pins');
@@ -33,7 +32,6 @@
   var render = function (data) {
 
     var fragment = document.createDocumentFragment();
-    data.length = data.length < MAX_PIN_AMOUNT ? data.length : MAX_PIN_AMOUNT;
     data.forEach(function (it) {
       fragment.appendChild(renderSimilar(it));
     });
@@ -52,6 +50,6 @@
 
   window.pin = {
     render: render,
-    removePins: removePins
+    remove: removePins
   };
 })();

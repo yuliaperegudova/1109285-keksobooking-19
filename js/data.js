@@ -32,7 +32,6 @@
 
   var onErrorClick = function () {
     closeErrorPopup();
-    // window.form.reset();
   };
 
   var onErrorEscPress = function (evt) {
@@ -47,7 +46,7 @@
   };
 
   var updatePins = function () {
-    window.pin.removePins();
+    window.pin.remove();
     window.card.remove();
     window.pin.render(window.filters.update(window.data.allPins));
   };

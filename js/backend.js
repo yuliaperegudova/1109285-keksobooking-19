@@ -1,12 +1,13 @@
 'use strict';
 
 (function () {
+
+  var TIMEOUT = 10000;
   var URL = 'https://js.dump.academy/keksobooking/data';
   var URL_SAVE = 'https://js.dump.academy/keksobooking';
   var statusCode = {
     OK: 200
   };
-  var TIMEOUT = 10000;
 
   var successTemplate = document.querySelector('#success').content.querySelector('.success');
   var errorTemplate = document.querySelector('#error').content.querySelector('.error');
